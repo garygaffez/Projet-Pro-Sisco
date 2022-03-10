@@ -1,5 +1,7 @@
 <?php
 
+session_start();
+
     require_once(dirname(__FILE__).'/../utils/regex.php');
 
     include(dirname(__FILE__).'/../views/templates/head.php');

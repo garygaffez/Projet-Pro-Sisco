@@ -14,14 +14,14 @@
                         <form action="<?=htmlspecialchars($_SERVER['PHP_SELF'])?>" method="POST" novalidate class="d-flex flex-column justify-content-center">                               
                             <label for="Name" class="mb-1 fw-bold">Nom :</label>
                             <input type="text" class="mb-3 p-1" id="Name" pattern="<?=REG_STR_NO_NUMBER?>" value="<?=$lastname ?? ''?>" name="lastname" placeholder="Entrez votre Nom" required>
-                            <div class="text-danger fst-italic mb-3">
+                            <div class="colorRed fst-italic mb-3">
                                 <?=$errorArrayContact['errorLastname'] ?? '';?>
                                 <?=$errorArrayContact['emptyInputLastname'] ?? ''?>
                             </div>                                    
                         
                             <label for="firstName" class="mb-1 fw-bold">Prénom :</label>
                             <input type="text" class="mb-3 p-1" id="firstName" pattern="<?=REG_STR_NO_NUMBER?>" value="<?=$firstname ?? ''?>" name="firstname" placeholder="Entrez votre Prénom" required>
-                            <div class="text-danger fst-italic mb-3">
+                            <div class="colorRed fst-italic mb-3">
                                 <?=$errorArrayContact['errorFirstname'] ?? '';?>
                                 <?=$errorArrayContact['emptyInputFirstname'] ?? ''?>
                             </div>
@@ -29,7 +29,7 @@
                             <label for="email" class="mb-1 fw-bold">E-mail :</label>
                             <input type="email" class="mb-3 p-1" id="email" name="email" value="<?=$email ?? ''?>"  placeholder="Entrez votre e-mail" required>
                             <span class="alertMessage">Veuillez rentrer un e-mail valide</span>
-                            <div class="text-danger fst-italic mb-3">
+                            <div class="colorRed fst-italic mb-3">
                                 <?=$errorArrayContact['errorMail'] ?? '';?>
                                 <?=$errorArrayContact['emptyInputMail'] ?? '';?>
                             </div>
@@ -40,7 +40,7 @@
 
                             <label for="textareaContact" class="mb-1 text-center fs-6 fw-bold">Saisissez un message :</label>
                             <textarea id="story" name="textareaContact" rows="5" cols="33" class="mb-1 p-1" maxlength="250" required></textarea>
-                            <div class="text-danger fst-italic mb-3">
+                            <div class="colorRed fst-italic mb-3">
                                 <?=$errorArrayContact['errortextareaContact'] ?? '';?>
                             </div>
                             

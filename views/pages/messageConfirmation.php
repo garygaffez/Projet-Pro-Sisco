@@ -9,7 +9,7 @@
                 <div class="row justify-content-center">
                     <div class="col-10 col-sm-8">                                                    
                         <p class="mb-4 fs-5 text-center fw-bold">Votre compte a bien été crée !</p> 
-                        <p class="mb-4 fs-5 text-center">Un e-mail de confirmation vien de vous être envoyé !</p>                        
+                        <p class="mb-4 fs-5 text-center">Un e-mail de confirmation viens de vous être envoyé !</p>                        
                     </div>                     
                 </div>
             </section>                

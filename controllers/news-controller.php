@@ -1,5 +1,7 @@
 <?php
 
+session_start();
+
     include(dirname(__FILE__).'/../views/templates/head.php');
 
     include(dirname(__FILE__).'/../views/templates/first-time-page.php');

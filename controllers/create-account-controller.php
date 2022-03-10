@@ -1,32 +1,42 @@
 <?php
 
-    require_once(dirname(__FILE__).'/../utils/regex.php');
+session_start();
 
-    include(dirname(__FILE__).'/../views/templates/head.php');
+if (isset($_SESSION['id'])){
+    // header('location: /controllers/profil-controller.php');
+}
 
-    include(dirname(__FILE__).'/../views/templates/navbar-others-pages.php');
+require_once(dirname(__FILE__).'/../utils/regex.php');
 
-    
+require_once (dirname(__FILE__).'/../models/User.php');
+
+$result = false;
 
 $errorArrayCreateAccount = [];
 if ($_SERVER["REQUEST_METHOD"] == "POST") {
     
-    $firstname = trim(filter_input(INPUT_POST,'firstname',FILTER_SANITIZE_STRING));
+    extract($_POST);
+
+    $tokenRegister = bin2hex(random_bytes(50));
+
     if (!empty($firstname)) {
-        $resultFirstname = filter_var($firstname, FILTER_VALIDATE_REGEXP, array("options"=>array("regexp"=>"/".REG_STR_NO_NUMBER."/")));
+        $resultFirstname = preg_match("/^[a-zÀ-ÿA-Z '-]+$/", $firstname);
         if ($resultFirstname == false) {
             $errorArrayCreateAccount['errorFirstname'] = 'le prénom n\'a pas le bon format !';
+        }else {
+            $firstname = trim(filter_var($firstname,FILTER_SANITIZE_SPECIAL_CHARS));
         }
     } else {
         $errorArrayCreateAccount['emptyInputFirstname'] = 'le prénom est obligatoire !';
     }
 
-    $lastname = trim(filter_input(INPUT_POST,'lastname',FILTER_SANITIZE_STRING));
+    $lastname = trim(filter_input(INPUT_POST,'lastname',FILTER_SANITIZE_SPECIAL_CHARS));
+    var_dump($lastname);
     if (!empty($lastname)) {
-        $resultLastname = filter_var($lastname, FILTER_VALIDATE_REGEXP, array("options"=>array("regexp"=>"/".REG_STR_NO_NUMBER."/")));
+        $resultLastname = preg_match("/^[a-zÀ-ÿA-Z '-]+$/", $lastname);
         if ($resultLastname == false) {
             $errorArrayCreateAccount['errorLastname'] = 'le nom n\'a pas le bon format !';
-        }
+        } 
     }else {
         $errorArrayCreateAccount['emptyInputLastname'] = 'le nom est obligatoire !';
     }
@@ -41,7 +51,7 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
         $errorArrayCreateAccount['emptyInputMail'] = 'le mail est obligatoire !';  
     }
 
-    $phoneNumber = trim(filter_input(INPUT_POST,'phoneNumber',FILTER_SANITIZE_STRING));
+    $phoneNumber = trim(filter_input(INPUT_POST,'phoneNumber',FILTER_SANITIZE_FULL_SPECIAL_CHARS) ?? '');
     if(!empty($phoneNumber)) {
         $resultphoneNumber = filter_var($phoneNumber, FILTER_VALIDATE_REGEXP, array("options"=>array("regexp"=>"/".REG_STR_PHONENUMBER."/")));
         if ($resultphoneNumber == false) {    
@@ -52,23 +62,43 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
     }
 
     $password = $_POST['password'];
-    if (empty($password)) {
+    $confirmPassword = $_POST['confirmPassword'];
+    
+    // var_dump($password);
+    
+    if (!empty($password)) {
+        if ($password == $confirmPassword){
+            $hashedPassword = password_hash($password, PASSWORD_BCRYPT);
+        }
+    }else {
         $errorArrayCreateAccount['emptyInputPassword'] = 'Ce champ est obligatoire !';
     }
-    $confirmPassword = trim(filter_input(INPUT_POST,'confirmPassword',FILTER_SANITIZE_STRING));
-    if (!empty($hack)) {
-        $errorArrayCreateAccount['emptyInputPassword'] = 'Ce champ est obligatoire !';
-    } if ($confirmPassword !== $password) {
-        $errorArrayCreateAccount['invalidConfirmation'] = 'le mot de passe ne correspond pas !';
+
+    if (empty($errorArrayCreateAccount)) {
+        
+        $user = new User($lastname, $firstname, $email, $phoneNumber, $hashedPassword);
+
+        $user->setTokenRegister($tokenRegister);
+        
+        // var_dump($user);
+        $verifMail = $user->isMailExists();
+        if (!$verifMail){
+            $result = $user->new();
+        }else {
+            $errorArrayCreateAccount['errorMail'] = "l'adresse mail est déjà existante !";
+        }   
     }
 
 }
 
+include(dirname(__FILE__).'/../views/templates/head.php');
 
-    if (($_SERVER["REQUEST_METHOD"] != "POST") || !empty($errorArrayCreateAccount)) { 
-        include(dirname(__FILE__).'/../views/pages/create-account.php');
-    } else { 
-        include(dirname(__FILE__).'/../views/pages/messageConfirmation.php');
-    }
+include(dirname(__FILE__).'/../views/templates/navbar-others-pages.php');
 
-    include(dirname(__FILE__).'/../views/templates/footer.php');
+if (($_SERVER["REQUEST_METHOD"] != "POST") || !empty($errorArrayCreateAccount)) { 
+    include(dirname(__FILE__).'/../views/pages/create-account.php');
+} else { 
+    include(dirname(__FILE__).'/../views/pages/messageConfirmation.php');
+}
+
+include(dirname(__FILE__).'/../views/templates/footer.php');
