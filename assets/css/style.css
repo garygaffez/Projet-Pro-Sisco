@@ -210,3 +210,7 @@ a:hover {
 .colorRed {
     color: red;
 }
+
+.table-rpi{
+    background-color: rgb(153, 214, 255);
+}

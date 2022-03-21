@@ -6,27 +6,24 @@
             <span class="navbar-toggler-icon"></span>
             </button>
             <div class="collapse navbar-collapse" id="navbarNav">
-                <ul class="navbar-nav">
+                <ul class="navbar-nav ms-3">
                     <li class="nav-item">
-                    <a class="nav-link active text-dark fs-6" aria-current="page" href="#actualitésAncre">Actualités</a>
+                    <a class="nav-link active text-dark fs-5" aria-current="page" href="#actualitésAncre">Actualités</a>
                     </li>
                     <li class="nav-item">
-                    <a class="nav-link text-dark fs-6" href="#">Le RPI</a>
+                    <a class="nav-link text-dark fs-5" href="#">Le RPI</a>
                     </li>
                     <li class="nav-item">
-                    <a class="nav-link text-dark fs-6" href="#">Les écoles</a> 
+                    <a class="nav-link text-dark fs-5" href="#">Les écoles</a> 
                     </li>
                     <li class="nav-item">
-                    <a class="nav-link text-dark fs-6" href="#">Documents</a>
+                    <a class="nav-link text-dark fs-5" href="#">Documents</a>
                     </li>
                     <li class="nav-item">
-                    <a class="nav-link text-dark fs-6" href="/controllers/contact-controller.php">Contact</a>
+                    <a class="nav-link text-dark fs-5" href="/controllers/contact-controller.php">Contact</a>
                     </li>
                     <li class="nav-item">
-                    <a class="nav-link text-dark fs-6" href="/controllers/connexion-controller.php">Mon espace</a>
-                    </li>
-                    <li class="nav-item">
-                    <a class="nav-link text-dark fs-6" href="/controllers/liste-parents-controller.php">Admin</a>
+                    <a class="nav-link text-dark fs-5" href="/controllers/connexion-controller.php">Mon espace</a>
                     </li>
                 </ul>
             </div>

@@ -2,11 +2,11 @@
 
 session_start();
 
+$errorArrayConnection = [];
+
 if (isset($_SESSION['id'])){
     header('location: /controllers/profil-controller.php');
 }
-
-// var_dump($_SESSION);
 
 require_once(dirname(__FILE__).'/../utils/regex.php');
 
@@ -14,7 +14,8 @@ require_once (dirname(__FILE__).'/../models/User.php');
 
 $id = intval(filter_input(INPUT_GET,'id',FILTER_SANITIZE_NUMBER_INT));
 
-$errorArrayConnection = [];
+
+
 if ($_SERVER["REQUEST_METHOD"] == "POST") {
 
     $email = trim(filter_input(INPUT_POST,'email',FILTER_SANITIZE_EMAIL));
@@ -39,21 +40,27 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
 
         $user = $parent->login();
 
-        if (password_verify($password, $user->getPassword())){
-            $_SESSION['id'] = $user->getId();
-            $_SESSION['firstname'] = $user->getFirstname();
-            header('location: /controllers/profil-controller.php');
-        }else {
-            // $errorArrayConnection['errorMail'] = "l'adresse mail est déjà existante !";
-            $errorArrayConnection['errorPasswordValidation'] = 'Veuillez vérifier votre adresse e-mail et votre mot de passe !';
-        }   
-    }
-
-
-
+        if(!$user){
+            $errorArrayConnection['noAccount'] = 'Il n\'existe pas de compte pour cette adresse mail !';
+        }else if ($user->validated_at != NULL) {
+            if (password_verify($password, $user->password)){
+                $_SESSION['id'] = $user->id_user;
+                $_SESSION['firstname'] = $user->firstname;
+                $_SESSION['admin'] = $user->admin;
+                if ($_SESSION['admin'] === '1'){
+                    header('location: /controllers/liste-parents-controller.php'); die;
+                }else{
+                    header('location: /controllers/profil-controller.php'); die;
+                }                    
+            }else{
+                $errorArrayConnection['errorPasswordValidation'] = 'Veuillez vérifier vos identifiants !';
+            }
+        }else { 
+            $errorArrayConnection['errorValid'] = "Veuillez valider votre compte avant de vous connecter!";
+        }
+        }
+    
 }
-
-
 
 
 include(dirname(__FILE__).'/../views/templates/head.php');

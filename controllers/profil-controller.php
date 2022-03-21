@@ -3,7 +3,7 @@
 session_start();
 
 if(!isset($_SESSION['id'])) {
-    header('location: /controllers/connexion-controller.php');
+    // header('location: /controllers/ajout-cantine-controller.php');
 }
 
 require_once(dirname(__FILE__).'/../utils/regex.php');
@@ -85,8 +85,7 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
 }
 
 try{
-    $children = Child::find($id);
-
+    $childrenByParent = Child::childrenByParent($id);
 }catch(Exception $e){
     die($e->getMessage());
 }

@@ -1,7 +1,7 @@
 <main class="backImageForm">
             
     <div class="col-12 title order-2 order-md-1 d-flex">
-        <h1 class="mt-5 pt-3 mb-1 ms-2">Contact</h1>                
+        <h1 class="mt-5 pt-5 mb-1 ms-3">Contact</h1>                
     </div>
 
     <div class="container-fluid h-75 p-0 d-flex flex-column justify-content-center">

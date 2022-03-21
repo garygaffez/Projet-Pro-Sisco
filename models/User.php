@@ -12,7 +12,7 @@ class User {
     private $registered_at;
     private $validated_at;
     private $deleted_at;
-    private $tokenRegister;       
+    private $tokenRegister;     
     private $connectPDO;
 
     public function __construct($lastname = '', $firstname ='', $email = '', $phoneNumber = '', $password = '', $accountDate = ''){
@@ -84,12 +84,14 @@ class User {
     public function getValidatedAt(){
         return $this->validated_at;
     }
+
     public function setDeletedAt($deleted_at){
         $this->deleted_at = $deleted_at;
     }
     public function getDeletedAt(){
         return $this->deleted_at;
     }
+
     public function setTokenRegister($tokenRegister){
         $this->tokenRegister = $tokenRegister;
     }
@@ -159,12 +161,12 @@ class User {
             }
         
 
-            $sth->execute();;
+            $sth->execute();
 
             $users = $sth->fetchAll();
 
             if (!$users) {
-                throw new PDOException(ERROR);
+                throw new PDOException(EMPTY_USERS);
             }else if(empty($users)) {
                 throw new PDOException(ERROR_NOT_FOUND);
             }else {
@@ -175,6 +177,7 @@ class User {
             return $e;
         }
     }
+
 
         /**
      * affiche un parent de la bdd
@@ -204,8 +207,6 @@ class User {
             return $e;
         }
     }
-
-
     
     /**
      * Mettre à jour un patient de la bdd
@@ -325,18 +326,20 @@ class User {
     public function login() {
 
         try{
-            $sql = "SELECT `id_user`, `password`, `firstname` FROM `user` WHERE `mail`= :mail";
+            $sql = "SELECT `id_user`, `password`, `firstname`, `validated_at`, `admin` FROM `user` WHERE `mail`= :mail";
 
             $sth = $this->connectPDO->prepare($sql);
             
             $sth->bindValue(":mail", $this->mail, PDO::PARAM_STR);
 
             if ($sth->execute()){
-                
-                $user = $sth->fetch();
+                return $user = $sth->fetch();
                 $this->password = $user->password;
                 $this->id = $user->id_user;
                 $this->firstname = $user->firstname;
+                $this->validated_at = $user->validated_at;
+            }else{
+                return false;
             }
 
             return $this;
@@ -360,6 +363,120 @@ class User {
         }catch (PDOException $e) {
             return $e;
         }     
+    }
+
+    public function getUserByToken(string $token){
+        $sql = 'SELECT `id_user` FROM `user` WHERE `tokenRegister` = :token;';
+        $sth = $this->connectPDO->prepare($sql);
+        $sth->bindValue(':token', $token, PDO::PARAM_STR);
+        if ($sth->execute()) {
+            if ($sth->fetch()) {
+                return true;
+            }
+            return false;
+        }
+    }
+
+    public function ValidateAccount(){
+        try {
+            if ($this->getUserByToken($this->tokenRegister)) {
+                $sql = 'UPDATE `user` SET `validated_at`= :validated_at WHERE `tokenRegister` = :token;';
+                
+                $sth = $this->connectPDO->prepare($sql);
+                
+                $sth->bindValue(':validated_at', $this->validated_at, PDO::PARAM_STR);
+                $sth->bindValue(':token', $this->tokenRegister, PDO::PARAM_STR);
+                
+                if ($sth->execute()) {
+                    return true;
+                }
+            }
+            return false;
+        } catch (\PDOException $th) {
+            echo $th->getMessage();
+        }
+    }
+
+    public function AccountIsVerify(string $token){
+        $sql = 'SELECT `id_user` FROM `user` WHERE `tokenRegister` = :token and `validated_at` IS NOT NULL;';
+        $sth = $this->connectPDO->prepare($sql);
+        $sth->bindValue(':token', $token, PDO::PARAM_STR);
+        if ($sth->execute()) {
+            if ($sth->fetch()) {
+                return true;
+            }
+            return false;
+        }
+    }
+
+    public function forgotPassword(){
+        $sql = 'SELECT `tokenRegister` FROM `user` WHERE mail = :mail;';
+        $sth = $this->connectPDO->prepare($sql);
+        $sth->bindValue(":mail", $this->mail, PDO::PARAM_STR);
+        $sth->execute();
+        $result = $sth->fetchColumn();
+        if ($result === false){
+            return false;
+        }else{
+            return true;
+        }  
+    }
+
+
+    public static function findAllAjax(string $search = '',string $selectpatientNumber = '',string $offset = '') {
+        
+        try {
+            $connectPDOStatic = Database::connect();
+            if ( $selectpatientNumber == '' && $offset == '') {
+                $sql = "SELECT * FROM `user` ORDER BY `lastname`;";
+                $sth = $connectPDOStatic->prepare($sql);
+            } else {
+                $sql = "SELECT * FROM `user` WHERE `lastname` LIKE :search OR `firstname` LIKE :search AND `deleted_at` IS NULL  ORDER BY `lastname` LIMIT :selectpatientNumber OFFSET :offset;";
+                $sth = $connectPDOStatic->prepare($sql);
+
+            $sth->bindValue(":search", '%'.$search.'%', PDO::PARAM_STR);
+
+            $sth->bindValue(":selectpatientNumber", $selectpatientNumber, PDO::PARAM_INT);
+
+            $sth->bindValue(":offset", $offset, PDO::PARAM_INT);
+            }
+
+            $sth->execute();
+
+            $users = $sth->fetchAll();
+
+            if (!$users) {
+                throw new PDOException(EMPTY_USERS);
+            }else if(empty($users)) {
+                throw new PDOException(ERROR_NOT_FOUND);
+            }else {
+                return $users;            
+            }
+        } catch (PDOException $e) {
+            return $e;
+        }
+    }
+
+
+    public function deleteUserAjax() {
+        
+        try {
+            $sql = "UPDATE `user` SET `deleted_at` = :deletedDate WHERE `id_user` = :id;";
+
+            $sth = $this->connectPDO->prepare($sql);
+
+            $sth->bindValue(":deletedDate", $this->getDeletedAt(), PDO::PARAM_STR);
+
+            $sth->bindValue(":id", $this->getId(), PDO::PARAM_INT);
+
+            if ($sth->execute()){
+                return true;
+            }
+            return false;
+
+        } catch (PDOException $e) {
+            return $e;
+        }
     }
 
 

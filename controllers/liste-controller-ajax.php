@@ -6,7 +6,8 @@ require_once(dirname(__FILE__).'/../utils/regex.php');
 require_once (dirname(__FILE__).'/../models/User.php');
 
 $id = intval(filter_input(INPUT_GET,'id',FILTER_SANITIZE_NUMBER_INT));
-
+// var_dump($id);
+// die;
 $page = intval(filter_input(INPUT_GET,'page',FILTER_SANITIZE_NUMBER_INT));
 
 $search = trim(filter_input(INPUT_GET, 'search', FILTER_SANITIZE_FULL_SPECIAL_CHARS) ?? '');
@@ -24,17 +25,25 @@ if($page <= 0 || $page > $nbPages) {
 $offset = ($page - 1) * $selectPatientNumber;
 
 
-// NOUVELLE MÉTHODE A PARTIR DE PHP 8.1
-// $search = htmlspecialchars(stripslashes(trim($_GET['search'])));
-
-$parents = User::findAll($search, $selectPatientNumber, $offset);
 
 
+$parents = User::findAllAjax($search, $selectPatientNumber, $offset);
 
-include(dirname(__FILE__).'/../views/templates/head.php');
+// var_dump($parents);
+if (isset($_POST['ajaxDelete'])) {
+    $user = new User();
+    $id = intval($_POST['id']);
+    $deletedAt = date("Y-m-d H:i:s");
+    $user->setId($id);
+    $user->setDeletedAt($deletedAt);
 
-include(dirname(__FILE__).'/../views/templates/navbar-others-pages.php');
+    if ($user->deleteUserAjax()){
+        echo json_encode(['message' => true], JSON_UNESCAPED_UNICODE);
+        die;
+    }
+}
 
-include(dirname(__FILE__).'/../views/pages/liste-parents.php');
-
-include(dirname(__FILE__).'/../views/templates/footer.php');
+if (empty($_POST)){
+    echo json_encode($parents, JSON_UNESCAPED_UNICODE);
+    die;
+}

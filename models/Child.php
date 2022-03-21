@@ -106,7 +106,7 @@ class Child {
     public static function find(int $id) {
         
         try {
-            $sql = "SELECT * FROM `child` WHERE `id_user` = :id";
+            $sql = "SELECT * FROM `child` WHERE `id_child` = :id";
 
             $connectPDOStatic = Database::connect();
 
@@ -116,8 +116,8 @@ class Child {
 
             $sth->execute();
             //on récupere les données
-            $child = $sth->fetchAll();
-
+            $child = $sth->fetch();
+            // var_dump($child);
             if (!$child) {
                 // throw new PDOException(ERROR_NOT_FOUND);
             }
@@ -125,6 +125,28 @@ class Child {
             return $child;
 
         } catch (PDOException $e) {
+            return $e;
+        }
+    }
+
+    public static function childrenByParent(int $id){
+        try {
+            //on récupére les données
+            $sql = "SELECT * FROM `child` WHERE `id_user` = :id";
+
+            $connectPDOStatic = Database::connect();
+
+            $sth = $connectPDOStatic->prepare($sql);
+
+            $sth->bindValue(":id", $id, PDO::PARAM_INT);
+
+            $sth->execute();
+
+            $users = $sth->fetchAll();
+            return $users;
+
+        } catch (PDOException $e) {
+            $e = 'Error !';
             return $e;
         }
     }
@@ -195,5 +217,35 @@ class Child {
             return true;
         }        
     }
+
+    function countFrenchBusinessDays(int $year, int $month, array $weekdays_off = [6, 7]): int{
+    $holidays = [
+        1  => [1],       // jour de l'an
+        5  => [1, 8],    // fête du travail et armistice 39-45
+        7  => [14],      // fête nationale
+        8  => [15],      // Assomption
+        11 => [1, 11],   // Toussaint et armistice 14-18
+        12 => [25]       // noël
+    ];
+ 
+    $easter_day = (new DateTime("{$year}-03-21"))->modify('+'.easter_days($year, CAL_GREGORIAN).' days');
+    $easter_month = $easter_day->format('n');
+    $holidays[$easter_month][] = $easter_day->format('j');
+ 
+    // no business days
+    if ( ! empty($weekdays_off)) {
+        $start = new DateTimeImmutable("{$year}-{$month}-01");
+        $end   = $start->modify('first day of next month');
+        $days  = new DatePeriod($start, new DateInterval('P1D'), $end);
+ 
+        foreach ($days as $dt) {
+            if (in_array($dt->format('N'), $weekdays_off)) {
+                $holidays[$month][] = $dt->format('j');
+            }
+        }
+    }
+ 
+    return $start->format('t') - count(array_unique($holidays[$month]));
+}
 
 }

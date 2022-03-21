@@ -1,7 +1,7 @@
 <main class="backImageForm">
             
     <div class="col-12 title order-2 order-md-1">
-        <h1 class="mt-5 pt-3 mb-1 ms-2">Mon espace</h1>                
+        <h1 class="mt-5 pt-5 mb-1 ms-2">Mon espace</h1>                
     </div>
 
     <div class="container-fluid h-75 p-0 d-flex flex-column justify-content-center">
@@ -11,14 +11,16 @@
                     <div class="col-12 col-sm-10">                                                    
                         <h2 class="mb-4 text-center title">Inscription</h2>
                                                             
-                        <form action="<?=htmlspecialchars($_SERVER['PHP_SELF'])?>" method="POST" class="d-flex flex-column justify-content-center" id="suscribe"> 
+                        <form action="<?=htmlspecialchars($_SERVER['PHP_SELF'])?>" method="POST" class=" ms-4 d-flex flex-column justify-content-center" id="suscribe"> 
                             
                             <label for="lastname" class="mb-1 fs-5 fw-bold">Nom :</label>
                             <div class="form-groupe">                                
                                 <input type="text" class="mb-1 p-1 w-75" id="lastname" pattern="<?=REG_STR_NO_NUMBER?>" value="<?=$lastname ?? ''?>" name="lastname" placeholder="Entrez votre Nom" required>
                                 <img src="/assets/img/check.svg" alt="icone de validation" class="icone-verif ms-3">
-                                <span class="alertMessage">Veuillez rentrer 3 à 24 caractéres</span>
-                            </div>
+                                <div>
+                                    <span class="alertMessage">Veuillez rentrer 2 à 30 caractéres</span>
+                                </div>
+                            </div>                            
                             <div class="colorRed fst-italic mb-3">
                                 <?=$errorArrayCreateAccount['errorLastname'] ?? '';?>
                                 <?=$errorArrayCreateAccount['emptyInputLastname'] ?? ''?>
@@ -28,8 +30,9 @@
                             <div class="form-groupe">
                                 <input type="text" class="mb-1 p-1 w-75" id="firstname" pattern="<?=REG_STR_NO_NUMBER?>" value="<?=$firstname ?? ''?>" name="firstname" placeholder="Entrez votre Prénom" required>
                                 <img src="/assets/img/check.svg" alt="icone de validation" class="icone-verif ms-3">
-                                <span class="alertMessage">Veuillez rentrer 3 à 24 caractéres</span>
-
+                                <div>
+                                    <span class="alertMessage">Veuillez rentrer 2 à 30 caractéres</span>
+                                </div>
                             </div>
                             <div class="colorRed fst-italic mb-3">
                                 <?=$errorArrayCreateAccount['errorFirstname'] ?? '';?>
@@ -41,7 +44,9 @@
                                 <div class="form-groupe">
                                 <input type="email" class="mb-1 p-1 w-75" id="email" name="email" value="<?=$email ?? ''?>"  placeholder="Entrez votre e-mail" required>
                                 <img src="/assets/img/check.svg" alt="icone de validation" class="icone-verif ms-3">
-                                <span class="alertMessage">email du type exemple@mail.com</span>
+                                <div>
+                                    <span class="alertMessage">email du type exemple@mail.com</span>
+                                </div>
                                 </div>                               
                             <div class="colorRed fst-italic mb-3">
                                 <?=$errorArrayCreateAccount['errorMail'] ?? '';?>
@@ -97,7 +102,7 @@
                             <span class="alertMessage">Veuillez confirmer votre mot de passe</span>
                             
                             <div class="d-flex justify-content-end">
-                                <input type="submit" id="" class="btn btn-primary mt-4 fw-bold rounded-pill w-50" value="Je m'inscris"> 
+                                <input type="submit" id="" class="btn btn-primary mt-4 fw-bold rounded-pill" value="Je m'inscris"> 
                             </div>
                         </form>
                     </div>                     
