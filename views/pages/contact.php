@@ -11,7 +11,7 @@
                     <div class="col-10 col-sm-8">                                                    
                         <h2 class="mb-4 text-center title">Vous souhaitez nous contacter ?</h2>
                                                             
-                        <form action="<?=htmlspecialchars($_SERVER['PHP_SELF'])?>" method="POST" novalidate class="d-flex flex-column justify-content-center">                               
+                        <form action="<?=htmlspecialchars($_SERVER['PHP_SELF'])?>" method="POST" class="d-flex flex-column justify-content-center">                               
                             <label for="Name" class="mb-1 fw-bold">Nom :</label>
                             <input type="text" class="mb-3 p-1" id="Name" pattern="<?=REG_STR_NO_NUMBER?>" value="<?=$lastname ?? ''?>" name="lastname" placeholder="Entrez votre Nom" required>
                             <div class="colorRed fst-italic mb-3">

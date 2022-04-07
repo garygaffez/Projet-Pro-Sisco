@@ -11,20 +11,15 @@ function deleteUser(id) {
     }).then((response) => {
         return response.json();
     }).then((data) => {
+        console.log(data);
         if (data.message){
+            console.log('ok');
             getAllUsersAjax();
         }
 
     })
 }
 
-
-// let search = document.getElementById('search');
-
-// search.addEventListener('keyup', () =>{
-//     let searchValue = search.value
-//     getAllUsersAjax(searchValue);
-// })
 
 
 function getAllUsersAjax(search="") {
@@ -37,7 +32,7 @@ function getAllUsersAjax(search="") {
     }).then((response) => {
         return response.json();
     }).then((data) => {
-        console.log(data);
+        
         let listUser = "";
         usersList.innerText = "";
         data.map(user =>{
@@ -87,6 +82,13 @@ getAllUsersAjax();
 
 
 
+
+let search = document.getElementById('search');
+
+search.addEventListener('keyup', () =>{
+    let searchValue = search.value
+    getAllUsersAjax(searchValue);
+})
 
 
 // setInterval(getAllUsersAjax, 1500);

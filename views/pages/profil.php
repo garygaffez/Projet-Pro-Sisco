@@ -48,7 +48,7 @@
                                             <?php
                                             }
                                         } else { ?>
-                                            <p class="text-center colorRed">Veuillez ajouter un enfant pour pouvoir l'inscrire à la cantine !</p>
+                                            <p class="text-center bg-white colorRed fs-5">Veuillez ajouter un enfant pour pouvoir l'inscrire à la cantine !</p>
                                         <?php
                                         }
                                         ?>
@@ -81,7 +81,7 @@
                                         <img src="/assets/img/check.svg" alt="icone de validation" class="icone-verif ms-3">
                                         <span class="alertMessage">Veuillez rentrer 3 à 24 caractéres</span>
                                     </div>
-                                    <div class="colorRed fst-italic mb-3">
+                                    <div class="colorRed fs-5 fst-italic mb-3">
                                         <?= $errorArrayCreateChild['errorLastname'] ?? ''; ?>
                                         <?= $errorArrayCreateChild['emptyInputLastname'] ?? '' ?>
                                     </div>
@@ -93,7 +93,7 @@
                                         <span class="alertMessage">Veuillez rentrer 3 à 24 caractéres</span>
 
                                     </div>
-                                    <div class="colorRed fst-italic mb-3">
+                                    <div class="colorRed fs-5 fst-italic mb-3">
                                         <?= $errorArrayCreateChild['errorFirstname'] ?? ''; ?>
                                         <?= $errorArrayCreateChild['emptyInputFirstname'] ?? '' ?>
                                     </div>
@@ -104,7 +104,7 @@
                                         <img src="/assets/img/check.svg" alt="icone de validation" class="icone-verif ms-3">
                                         <span class="alertMessage">Veuillez rentrer 3 à 24 caractéres</span>
                                     </div>
-                                    <div class="colorRed fst-italic mb-3">
+                                    <div class="colorRed fs-5 fst-italic mb-3">
                                         <?= htmlentities($errorArrayCreateChild["birthdate"] ?? ''); ?>
                                         <?= htmlentities($errorArrayCreateChild["birthdateTime"] ?? ''); ?>
                                         <?= htmlentities($errorArrayCreateChild["emptyInputBirthDate"] ?? ''); ?>

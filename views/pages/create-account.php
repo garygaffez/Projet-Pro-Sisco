@@ -4,9 +4,9 @@
         <h1 class="mt-5 pt-5 mb-1 ms-2">Mon espace</h1>                
     </div>
 
-    <div class="container-fluid h-75 p-0 d-flex flex-column justify-content-center">
+    <div class="container h-75 p-0 d-flex flex-column justify-content-center">
         <div class="row justify-content-center">
-            <section class="col-11 col-sm-9 col-md-8 col-lg-7 col-xl-5 mt-5 order-3 order-md-2 backOrange rounded-3 p-3 mb-5">
+            <section class="col-11 col-sm-9 col-md-8 col-lg-7 col-xl-6 mt-5 order-3 order-md-2 backOrange rounded-3 p-3 mb-5">
                 <div class="row justify-content-center">
                     <div class="col-12 col-sm-10">                                                    
                         <h2 class="mb-4 text-center title">Inscription</h2>

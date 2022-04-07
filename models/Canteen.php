@@ -4,6 +4,7 @@ require_once (dirname(__FILE__)."/../utils/database.php");
 
 class Canteen {
     private $date;
+    private $id_child;
     private $connectPDO;
 
     public function __construct($date = ''){
@@ -11,11 +12,41 @@ class Canteen {
         $this->setDate($date);
     }
 
+    public function setIdChild($id_child) {
+        $this->id = $id_child;
+    }
+    public function getIdChild() {
+        return $this->id;
+    }
+
     public function setDate($date) {
         $this->date = $date;
     }
     public function getDate() {
         return $this->date;
+    }
+
+    
+
+    public function new(){
+
+        try {
+            $sql = "INSERT INTO `canteen`(`date`, `id_child`) 
+                    VALUES (:date, :id_child);";
+
+            $sth = $this->connectPDO->prepare($sql);
+
+            $sth->bindValue(":date", $this->getDate(), PDO::PARAM_STR);
+            $sth->bindValue(":id_child", $this->getIdChild(), PDO::PARAM_INT);
+
+            $sth->execute();
+
+            return true;
+            
+        } catch (PDOException $e) {
+            echo $e->getMessage();
+            return false;
+        }
     }
 
 

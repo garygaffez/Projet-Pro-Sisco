@@ -5,13 +5,18 @@
             <h1 class="mt-5 pt-5 ps-3 mb-1 ms-2">Admin</h1>
         </div>
 
-        <section class="col-12 col-md-8 col-xl-6 mt-5 order-3 order-md-2 backWhite rounded-3 p-3 mb-5">
+        <section class="col-12 col-md-10 col-xl-8 mt-5 order-3 order-md-2 backWhite rounded-3 p-3 mb-5">
+
+            <div class="col-12 text-start mt-3 mb-3">
+                <a href="dashboard-controller.php" class="pb-3"><- Retourner à mon tableau de bord</a>
+            </div>
+
             <div class="col-12 title order-2 order-md-1 text-center">
                 <h2 class="mt-2 ps-3 mb-1 ms-2">Liste des utilisateurs</h2>
             </div>
 
             <div class="row justify-content-center">
-                <div class="col-12 col-sm-10 d-flex justify-content-between">
+                <div class="col-12 col-sm-10 d-flex justify-content-center mt-3 mb-4">
                     <form action="<?=htmlspecialchars($_SERVER['PHP_SELF'])?>" method="GET" class="mt-3" id="form">
                         <!-- <p class="has-text-link has-text-weight-bold mb-1">Je recherche un enfant :</p> -->
                         <input type="search" class="" name="search" id="search" placeholder="rechercher"
@@ -23,8 +28,12 @@
                         </div>
                     </form>
 
-                    <form method="GET" class="mt-3">
-                        <!-- <p class="">Nombre de résultats par page</p> -->
+                    
+                
+                    
+
+                    <!-- <form method="GET" class="mt-3">
+                        <p class="">Nombre de résultats par page</p>
                         <div class="d-flex justify-content-center">
                             <select name="selectPatientNumber" class="form-select me-2">
                                 <option value="5" <?=($selectPatientNumber === 5) ? 'selected' : '';?>>5</option>
@@ -35,7 +44,7 @@
 
                             <button type="submit" class="btn btn-secondary btn-sm">Filtrer</button>
                         </div>
-                    </form>
+                    </form> -->
 
                 </div>
             </div>
@@ -100,7 +109,7 @@
 
 
 
-            <nav aria-label="pagination">
+            <!-- <nav aria-label="pagination">
 
                 <ul class="pagination d-flex justify-content-center mt-3">
 
@@ -155,38 +164,39 @@
 
                 </ul>
 
-            </nav>
+            </nav> -->
+            <div class="row justify-content-center">       
+                <div class="table-responsive">
+                    <table class="table">
+                        <?php
+                        // var_dump($parents);
+                            if ($parents instanceof PDOException) {?>
 
+                                <p class=""><?=$parents->getMessage();?></p>
+                            <?php                
+                        }else { ?>
+                        <thead>
+                            <tr>
 
-            <div class="table-responsive">
-                <table class="table">
-                    <?php
-                    // var_dump($parents);
-                        if ($parents instanceof PDOException) {?>
+                                <th scope="col">Nom</th>
+                                <th scope="col">Prénom</th>
+                                <th scope="col">mail</th>
+                                <th scope="col">Téléphone</th>
 
-                            <p class=""><?=$parents->getMessage();?></p>
-                        <?php                
-                    }else { ?>
-                    <thead>
-                        <tr>
+                            </tr>
+                        </thead>
 
-                            <th scope="col">Nom</th>
-                            <th scope="col">Prénom</th>
-                            <th scope="col">mail</th>
-                            <th scope="col">Téléphone</th>
+                        <tbody id="userslist">
 
-                        </tr>
-                    </thead>
-
-                    <tbody id="userslist">
-
-                    </tbody>
-                    
-                    <?php
-                    }
-                    ?>
-                </table>
-            </div>
+                        </tbody>
+                        
+                        <?php
+                        }
+                        ?>
+                    </table>
+                </div>
+            </div> 
+            
 
         </section>
     </div>

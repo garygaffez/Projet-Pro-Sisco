@@ -1,5 +1,5 @@
 <!-- bandeau carrousel -->
-<div class="bandeauImage">
+<div class="bandeauImage" id="actualitésAncre">
 
 <div id="carouselSiscoMobile" class="carousel slide d-sm-none mt-3" data-bs-ride="carousel">
     <div class="carousel-inner">

@@ -24,7 +24,26 @@
                     </li>
                     <li class="nav-item">
                     <a class="nav-link text-dark fs-5" href="/controllers/connexion-controller.php">Mon espace</a>
+                    <?php if(isset($_SESSION['admin']) && ($_SESSION['admin']) === '1') :?>
+                        <li class="nav-item">
+                        <a class="nav-link text-dark fs-5" href="/controllers/dashboard-controller.php">Admin</a>
+                        </li>
+                    <?php endif;?>
                     </li>
                 </ul>
+
+                <?php if(isset($_SESSION['firstname'])) :?>
+                <ul class="navbar-nav ms-md-auto me-3ms-3">
+                    <li class="nav-item">
+                        <div class="col d-flex justify-content-end align-items-center me-5">
+                            <img src="/assets/img/connect.png" class="connect me-2" alt="">
+                            <p class="fs-5 mb-0 pt-2 text-decoration-none text-capitalize">Bonjour <?=$_SESSION['firstname'];?> !</p>
+                        </div>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link text-danger fs-5 me-3" href="/controllers/logout-user-controller.php">Deconnexion</a>
+                    </li>
+                </ul>
+            <?php endif;?>
             </div>
     </nav>

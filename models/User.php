@@ -10,12 +10,14 @@ class User {
     private $phone;
     private $password;
     private $registered_at;
+    private $description;
     private $validated_at;
     private $deleted_at;
     private $tokenRegister;     
     private $connectPDO;
 
-    public function __construct($lastname = '', $firstname ='', $email = '', $phoneNumber = '', $password = '', $accountDate = ''){
+    public function __construct($lastname = '', $firstname ='', $email = '', $phoneNumber = '', 
+    $password = '', $accountDate = '', $description ='') {
         $this->connectPDO = Database::connect();
         $this->setLastname($lastname);
         $this->setFirstname($firstname);
@@ -23,6 +25,7 @@ class User {
         $this->setPhone($phoneNumber);
         $this->setPassword($password);
         $this->setRegistered_at($accountDate);
+        $this->setMessageFormContact($description);
     }
 
     public function setId($id){
@@ -63,6 +66,13 @@ class User {
         return $this->phone;
     }
 
+    public function setMessageFormContact($description){
+        $this->description = $description;
+    }
+    public function getMessageFormContact(){
+        return $this->description;
+    }
+
     
     public function setPassword($password){
         $this->password = $password;
@@ -100,7 +110,7 @@ class User {
     }
 
 
-        /**
+    /**
      * fonction permettant d'insérer dans la base de données les données récupérées avec set
      * @return true si tout va bien
      * 
@@ -110,19 +120,19 @@ class User {
 
         try {
             $sql = "INSERT INTO `user`(`lastname`, `firstname`, `mail`, `phone`, `password`, `tokenRegister`) 
-                    VALUES (:lastname, :firstname, :mail, :phone, :password, :token)";
+                    VALUES (:lastname, :firstname, :mail, :phone, :password, :token);";
 
-            $query = $this->connectPDO->prepare($sql);
+            $sth = $this->connectPDO->prepare($sql);
 
-            $query->bindValue(":lastname", $this->getLastname(), PDO::PARAM_STR);
-            $query->bindValue(":firstname", $this->getFirstname(), PDO::PARAM_STR);
-            $query->bindValue(":mail", $this->getMail(), PDO::PARAM_STR);
-            $query->bindValue(":phone", $this->getPhone(), PDO::PARAM_STR);
-            $query->bindValue(":password", $this->getPassword(), PDO::PARAM_STR);
-            $query->bindValue(":token", $this->getTokenRegister(), PDO::PARAM_STR);
+            $sth->bindValue(":lastname", $this->getLastname(), PDO::PARAM_STR);
+            $sth->bindValue(":firstname", $this->getFirstname(), PDO::PARAM_STR);
+            $sth->bindValue(":mail", $this->getMail(), PDO::PARAM_STR);
+            $sth->bindValue(":phone", $this->getPhone(), PDO::PARAM_STR);
+            $sth->bindValue(":password", $this->getPassword(), PDO::PARAM_STR);
+            $sth->bindValue(":token", $this->getTokenRegister(), PDO::PARAM_STR);
 
-            $query->execute();
- 
+            $sth->execute();
+
             return true;
             
         } catch (PDOException $e) {
@@ -179,7 +189,7 @@ class User {
     }
 
 
-        /**
+    /**
      * affiche un parent de la bdd
      */
     public static function find(int $id) {
@@ -194,13 +204,36 @@ class User {
             $sth->bindValue(":id", $id, PDO::PARAM_INT);
 
             $sth->execute();
-            //on récupere les données
+
             $parent = $sth->fetch();
-            // var_dump($parent);
+
             if (!$parent) {
                 throw new PDOException(ERROR_NOT_FOUND);
             }
+            return $parent;
 
+        } catch (PDOException $e) {
+            return $e;
+        }
+    }
+
+
+    public static function findAllMail() {
+        
+        try {
+            $sql = "SELECT `mail`, `firstname`, `lastname` FROM `user`";
+
+            $connectPDOStatic = Database::connect();
+
+            $sth = $connectPDOStatic->prepare($sql);
+
+            $sth->execute();
+
+            $parent = $sth->fetchAll();
+
+            if (!$parent) {
+                throw new PDOException(ERROR_NOT_FOUND);
+            }
             return $parent;
 
         } catch (PDOException $e) {
@@ -230,7 +263,7 @@ class User {
     }
 
 
-//methode permettant de supprimer un patient (et les rdv en changeant la clé étrangére de RESTRICT à CASCADE)
+    //methode permettant de supprimer un patient (et les rdv en changeant la clé étrangére de RESTRICT à CASCADE)
     public static function delete($id) {
         
         try {
@@ -323,10 +356,11 @@ class User {
         }        
     }
 
+    //méthode permettant la connexion de l'utilisateur
     public function login() {
 
         try{
-            $sql = "SELECT `id_user`, `password`, `firstname`, `validated_at`, `admin` FROM `user` WHERE `mail`= :mail";
+            $sql = "SELECT `id_user`, `password`, `firstname`, `validated_at`, `admin` FROM `user` WHERE `mail`= :mail;";
 
             $sth = $this->connectPDO->prepare($sql);
             
@@ -423,15 +457,16 @@ class User {
     }
 
 
-    public static function findAllAjax(string $search = '',string $selectpatientNumber = '',string $offset = '') {
+    public static function findAllAjax(string $search = '',int $selectpatientNumber = 10,int $offset = 0) {
         
         try {
             $connectPDOStatic = Database::connect();
-            if ( $selectpatientNumber == '' && $offset == '') {
-                $sql = "SELECT * FROM `user` ORDER BY `lastname`;";
+            if ( $selectpatientNumber == 10 && $offset == 0) {
+                $sql = "SELECT * FROM `user` WHERE `deleted_at` IS NULL ;";
                 $sth = $connectPDOStatic->prepare($sql);
-            } else {
-                $sql = "SELECT * FROM `user` WHERE `lastname` LIKE :search OR `firstname` LIKE :search AND `deleted_at` IS NULL  ORDER BY `lastname` LIMIT :selectpatientNumber OFFSET :offset;";
+            } 
+            else {
+                $sql = "SELECT * FROM `user` WHERE `deleted_at` IS NULL AND `lastname` LIKE :search OR `firstname` LIKE :search  ORDER BY `lastname` LIMIT :selectpatientNumber OFFSET :offset;";
                 $sth = $connectPDOStatic->prepare($sql);
 
             $sth->bindValue(":search", '%'.$search.'%', PDO::PARAM_STR);
@@ -455,6 +490,25 @@ class User {
         } catch (PDOException $e) {
             return $e;
         }
+    }
+
+    public function getAllUsers( int $perpage = 10, int $page = 0, string $search  = ""){
+        $sql = 'SELECT `id`,`pseudo`, `mail`, `lastname`, `firstname`, DATE_FORMAT(`created_at`, "%d/%m/%Y") AS  `created_at`, `deleted_at` 
+        FROM `users` 
+        WHERE `deleted_at` IS NULL AND 
+        `pseudo` LIKE :search or `lastname` LIKE :search or `firstname`  LIKE :search or `created_at` LIKE :search
+        LIMIT :perpage OFFSET :page ;';
+
+        $sth = $this->_pdo->prepare($sql);
+
+        $sth->bindValue(':perpage', $perpage, PDO::PARAM_INT);
+        $sth->bindValue(':page', $page, PDO::PARAM_INT);
+        $sth->bindValue(':search', "%$search%" , PDO::PARAM_STR);
+
+        if($sth->execute()){
+            return $sth->fetchAll();
+        }
+
     }
 
 

@@ -1,6 +1,6 @@
 <main class="backImageForm">     
     <div class="col-12 title order-2 order-md-1 mb-3">
-        <h1 class="mt-5 ms-2 pt-3 mb-1">Mon espace</h1>                
+        <h1 class="mt-5 pt-5 ms-2 pt-3 mb-1">Mon espace</h1>                
     </div>
     <!-- bloc orange Connexion -->
     <div class="container-fluid h-50 p-0 d-flex flex-column justify-content-center">
@@ -9,8 +9,11 @@
                 <div class="row justify-content-center">
                     <div class="col-10 col-sm-8">                                                    
                         <p class="mb-4 fs-5 text-center fw-bold">Votre compte a bien été crée !</p> 
-                        <p class="mb-4 fs-5 text-center">Un e-mail de confirmation viens de vous être envoyé !</p>                        
-                    </div>                     
+                        <p class="mb-4 fs-5 text-center">Un e-mail de confirmation viens de vous être envoyé afin de valider votre compte !</p>
+                        <p class="mb-4 mt-4 fs-5 text-center">Vous allez être redirigé vers la page de connexion</p>                        
+                        
+                    </div>  
+
                 </div>
             </section>                
         </div>

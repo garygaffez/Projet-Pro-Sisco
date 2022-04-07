@@ -1,7 +1,6 @@
 
-            <!-- PAGE PRINCIPALE ACTUALITÉ-->
-
-<main class="backImage" id="actualitésAncre">
+            <!-- PAGE PRINCIPALE ACTUALITÉ-->            
+<main class="backImage">
     <div class="container-fluid">
         <div class="row justify-content-evenly">
             <div class="col-12 title order-2 order-md-1">

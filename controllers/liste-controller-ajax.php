@@ -24,9 +24,6 @@ if($page <= 0 || $page > $nbPages) {
 
 $offset = ($page - 1) * $selectPatientNumber;
 
-
-
-
 $parents = User::findAllAjax($search, $selectPatientNumber, $offset);
 
 // var_dump($parents);

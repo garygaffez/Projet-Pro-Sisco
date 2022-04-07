@@ -14,8 +14,6 @@ require_once (dirname(__FILE__).'/../models/User.php');
 
 $id = intval(filter_input(INPUT_GET,'id',FILTER_SANITIZE_NUMBER_INT));
 
-
-
 if ($_SERVER["REQUEST_METHOD"] == "POST") {
 
     $email = trim(filter_input(INPUT_POST,'email',FILTER_SANITIZE_EMAIL));
@@ -35,21 +33,36 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
 
     if (empty($errorArrayConnection)) {
         
+        //nouvelle instanciation de la classe User
         $parent = new User();
+
+        //envoie du mail
         $parent->setMail($email);
 
+        //connexion avec la méthode login
         $user = $parent->login();
 
         if(!$user){
             $errorArrayConnection['noAccount'] = 'Il n\'existe pas de compte pour cette adresse mail !';
+
+        //Si la date de validation est différent de NULL (donc si le compte est validé)...
         }else if ($user->validated_at != NULL) {
+
+            //Si le mot de passe correspond au hachage
             if (password_verify($password, $user->password)){
+
+                //alors on ouvre une session utilisateur
                 $_SESSION['id'] = $user->id_user;
                 $_SESSION['firstname'] = $user->firstname;
                 $_SESSION['admin'] = $user->admin;
+
+                //Si l'utilisateur a un rôle administrateur
                 if ($_SESSION['admin'] === '1'){
-                    header('location: /controllers/liste-parents-controller.php'); die;
+
+                    //alors on le redirige sur son tableau de bord
+                    header('location: /controllers/dashboard-controller.php'); die;
                 }else{
+                    //sinon on le redirige sur sa page de profil
                     header('location: /controllers/profil-controller.php'); die;
                 }                    
             }else{

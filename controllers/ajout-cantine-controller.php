@@ -23,6 +23,7 @@ $idChild = intval(filter_input(INPUT_GET, 'id', FILTER_SANITIZE_NUMBER_INT));
 $result = false;
 
 $errorArrayCreateChild = [];
+
 //Calendrier
 $month = $_POST['month'] ?? date('n');
 
@@ -64,28 +65,23 @@ $nbWeeks = count($daysInMonth) / 7;
 $dateActuel = strtotime(date('Y-m-d'));
 
 
-    $idSchool = intval(filter_input(INPUT_POST, 'idSchool', FILTER_SANITIZE_NUMBER_INT));
-    if($idSchool <= 0){
-        $errorArrayCreateChild['emptyIdSchool'] = "Le champ est obligatoire";
+$idSchool = intval(filter_input(INPUT_POST, 'idSchool', FILTER_SANITIZE_NUMBER_INT));
+if($idSchool <= 0){
+    $errorArrayCreateChild['emptyIdSchool'] = "Le champ est obligatoire";
+}
+
+if (isset($_POST['ajaxAddCanteen'])) {
+    $canteen = new Canteen();
+    $id = intval($_POST['id']);
+    $deletedAt = ($_POST['date']);
+    $canteen->setIdChild($id_child);
+    $canteen->setDate($deletedAt);
+
+    if ($canteen->new()){
+        echo json_encode(['message' => true], JSON_UNESCAPED_UNICODE);
+        die;
     }
-    
-
-    // if (empty($errorArrayCreateChild)) {
-        $child = new Canteen();
-
-        $child->setDate($month);
-        
-        $registrationCanteen = Canteen::findDate($idChild);
-        var_dump($registrationCanteen);
-        if ($registrationCanteen){
-            echo'OK';
-        }else{
-            echo'pas OK';
-        }
-    //}
-
-
-
+}
 
 
 try{

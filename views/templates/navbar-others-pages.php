@@ -27,7 +27,7 @@
                     </li>
                     <?php if(isset($_SESSION['admin']) && ($_SESSION['admin']) === '1') :?>
                         <li class="nav-item">
-                        <a class="nav-link text-dark fs-5" href="/controllers/liste-parents-controller.php">Admin</a>
+                        <a class="nav-link text-dark fs-5" href="/controllers/dashboard-controller.php">Admin</a>
                         </li>
                     <?php endif;?>
                 </ul>
